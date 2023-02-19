@@ -1,0 +1,255 @@
+<!doctype html>
+
+<!-- 
+ GUI Project 2022 Patrick Duffy
+ Checkout Page
+ -->
+
+<html>
+
+  <head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Payment</title>
+	<link rel="stylesheet" href="CSS/MainStyleCSS.css">
+  </head>
+
+  <body>
+   <!-- Class flexBox is in MainStyleCSS.css -->
+	<div class="flexBox">
+		<!-- Link that brings user to the the home page when clicked -->
+		<a href="HomePage.html" target="_self" class="home">Home Page</a>
+		
+		<!-- Input boxes for user details -->
+		
+		Enter Name: <input id="userName" type="text">
+		<span id="validUserName"></span>
+		<br><br>
+		Enter Address: <input id="userAddress" type="text">
+		<span id="validUserAddress"></span>
+		<br><br>
+		Enter Credit Card: <input id="userCreditCard" type="text">
+		<span id="validCreditCard"></span>
+		
+		<h3 id="totalCost"></h3>
+		
+		<!-- Input boxes for coupon code -->
+		<h3>Enter coupon code</h3>
+		<input id="couponCode" type="text" style="margin-bottom: 15px;">
+		<!-- Calls couponValidation() function when button is clicked -->
+		<span id="validationButton"><button onclick="couponValidation()">Check coupon code</button></span>
+		<p id="validCoupon"></p>
+		
+		<h3 id="newTotalPrice"></h3>
+		
+		<!-- Uses event listener to call pay function -->
+		<button id="myBtn">Pay</button>
+		
+	</div>
+	
+	<script>
+	
+		// Goes to page NotSignedIn.html if userIsSignedIn is 0 or null/undefined.
+		if(sessionStorage.userIsSignedIn == 0 || sessionStorage.userIsSignedIn == null)
+		{
+			window.location="NotSignedIn.html";
+		}
+		
+		// Adds event listener to the element with the id myBtn.
+		let btn = document.getElementById("myBtn");
+		btn.addEventListener("click", pay);
+		
+		// Stores totalPrice from sessionStorage as a variable.
+		let total = sessionStorage.totalPrice;
+		// Changes element with the id totalCost to show the total cost of the items in the basket.
+		document.getElementById("totalCost").innerHTML = "Total Price: €" + total;
+		
+		// Creates variable finalPrice and sets it equal to the value in total.
+		let finalPrice = total;
+		
+		// Checks if coupon is valid.
+		function couponValidation()
+		{
+			// Stores the value of the element with the id couponCode as a variable.
+			let enteredCoupon = document.getElementById("couponCode").value;
+			
+			// Checks if the coupon is correct.
+			if(enteredCoupon == "sh5j2gskfx1")
+			{
+				// If the coupon is correct.
+				
+				// Removes the coupon validation button.
+				document.getElementById("validationButton").innerHTML = "";
+				// Displays message at the element with the id validCoupon.
+				document.getElementById("validCoupon").innerHTML = "Valid Coupon";
+				// Changes the colour message at the element with the id validCoupon to green.
+				document.getElementById("validCoupon").style.color = "green";
+				// Sets finalPrice to 20% less than the total price.
+				finalPrice -= total * 0.2;
+				// Displays finalPrice at the element with the id newTotalPrice.
+				document.getElementById("newTotalPrice").innerHTML = "New Price: €" + finalPrice;
+			}
+			else
+			{
+				// If the coupon is incorrect.
+				
+				// Displays message at the element with the id validCoupon.
+				document.getElementById("validCoupon").innerHTML = "Invalid Coupon";
+				// Changes the colour message at the element with the id validCoupon to red.
+				document.getElementById("validCoupon").style.color = "red";
+				// Sets finalPrice to the total price.
+				finalPrice = total;
+			}
+			
+			// Checks if finalPrice is less than the total price.
+			if(finalPrice < total)
+			{
+				// Stores finalPrice in sessionStorage.
+				sessionStorage.finalReducedPrice = finalPrice;
+				// Stores reducedPrice in sessionStorage as 1 (true).
+				sessionStorage.reducedPrice = 1;
+			}
+			
+		}
+		
+		// Checks if all input fields are valid and goes to Receipt.html if they are valid.
+		function pay()
+		{
+			// Creates a variable called valid and sets it to 0.
+			let valid = 0;
+			// Creates array with valid credit card characters.
+			let validCreditCardNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+			// Stores the value of the element at the id userCreditCard in a variable.
+			let enteredCreditCard = document.getElementById("userCreditCard").value;
+			// Creates a variable creditCardLength and sets it to the length of enteredCreditCard.
+			let creditCardLength = enteredCreditCard.length;
+		
+			// Checks if the length of the string of the element with the id userName is less than 1.
+			if(((document.getElementById("userName").value).length) < 1)
+			{
+				// If less than 1;
+				
+				// Displays message at the element with the id validUserName.
+				document.getElementById("validUserName").innerHTML = "Please Enter A Name";
+				// Sets colour of the message at the element with the id validUserName to red.
+				document.getElementById("validUserName").style.color = "red";
+			}
+			else
+			{
+				// If greater than or equal to 1;
+				
+				// Hides message at the element with the id validUserName.
+				document.getElementById("validUserName").innerHTML = "";
+				// Store value of the element with the id userName to sessionStorage.
+				sessionStorage.saveUserName = document.getElementById("userName").value;
+				// Increments value of valid by 1.
+				valid++;
+			}
+			
+			// Checks if the length of the string of the element with the id userAddress is less than 1.
+			if(((document.getElementById("userAddress").value).length) < 1)
+			{
+				// If less than 1;
+				
+				// Displays message at the element with the id validUserAddress.
+				document.getElementById("validUserAddress").innerHTML = "Please Enter An Address";
+				// Sets colour of the message at the element with the id validUserAddress to red.
+				document.getElementById("validUserAddress").style.color = "red";
+			}
+			else
+			{
+				// If greater than or equal to 1;
+				
+				// Hides message at the element with the id validUserAddress.
+				document.getElementById("validUserAddress").innerHTML = "";
+				// Store value of the element with the id userAddress to sessionStorage.
+				sessionStorage.saveUserAddress = document.getElementById("userAddress").value;
+				// Increments value of valid by 1.
+				valid++;
+			}
+			
+			// Creates variable called validNumber.
+			let validNumber;
+			
+			// Checks if characters in enteredCreditCard are valid by comparing them with numbers in array validCreditCardNumbers.
+			for(let i = 0; i < creditCardLength; i++)
+			{
+				// Sets validNumber to 0.
+				validNumber = 0;
+				
+				// Compares credit card characters at i to all of the valid characters.
+				for(let j = 0; j < validCreditCardNumbers.length; j++)
+				{
+					// If credit card character at i is valid.
+					if(enteredCreditCard.charAt(i) == validCreditCardNumbers[j])
+					{
+						// Increments value of valid by 1.
+						validNumber++;
+					}
+				}
+				
+				// Exits loop if validNumber is equal to 0 (invalid).
+				if(validNumber == 0)
+				{
+					i = creditCardLength;
+				}
+			}
+			
+			// Checks if credit card character are valid.
+			if(validNumber < 1)
+			{
+				// If validNumber is less than 1 (invalid).
+				
+				// Displays message at the element with the id validCreditCard.
+				document.getElementById("validCreditCard").innerHTML = "Inavalid Credit Card Number";
+				// Sets colour of the message at the element with the id validCreditCard to red.
+				document.getElementById("validCreditCard").style.color = "red";
+			}
+			else
+			{	
+				// If validNumber is greater than or equal to 1 (valid).
+				
+				// Checks length of inputed credit card number.
+				if(creditCardLength < 1)
+				{	
+					// Displays message at the element with the id validCreditCard.
+					document.getElementById("validCreditCard").innerHTML = "Please Enter A Credit Card Number";
+					// Sets colour of the message at the element with the id validCreditCard to red.
+					document.getElementById("validCreditCard").style.color = "red";
+				}
+				else if(creditCardLength < 16)
+				{
+					// Displays message at the element with the id validCreditCard.
+					document.getElementById("validCreditCard").innerHTML = "Number is too short";
+					// Sets colour of the message at the element with the id validCreditCard to red.
+					document.getElementById("validCreditCard").style.color = "red";
+				}
+				else if(creditCardLength > 16)
+				{
+					// Displays message at the element with the id validCreditCard.
+					document.getElementById("validCreditCard").innerHTML = "Number is too long";
+					// Sets colour of the message at the element with the id validCreditCard to red.
+					document.getElementById("validCreditCard").style.color = "red";
+				}
+				else
+				{
+					// Displays message at the element with the id validCreditCard.
+					document.getElementById("validCreditCard").innerHTML = "";
+					// Increments value of valid by 1.
+					valid++;
+				}
+				
+			}
+			
+			// Goes to Receipt.html if value is equal to 3.
+			if(valid == 3)
+			{
+				window.location="Receipt.html";
+			}
+		}
+	</script>
+
+  </body>
+
+</html>

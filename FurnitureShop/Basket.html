@@ -1,0 +1,143 @@
+<!doctype html>
+
+<!-- 
+ GUI Project 2022 Patrick Duffy
+ Basket Page
+ -->
+
+<html>
+
+  <head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Basket</title>
+	<link rel="stylesheet" href="CSS/MainStyleCSS.css">
+  </head>
+
+  <body>
+	<!-- Class flexBox is in MainStyleCSS.css -->
+	<div class="flexBox">
+	
+		<!-- Link that brings user to the the home page when clicked -->
+		<a href="HomePage.html" target="_self" class="home">Home Page</a>
+		
+		<h3>Items:</h3>
+
+		<p id="selectedProducts"></p>
+		
+		<br>
+		
+		<!-- Calls clearBasket() function when button is clicked -->
+		<button onclick="clearBasket()" style="margin-bottom: 50px;">Clear Basket</button>
+		
+		<h3 id="totalCost"></h3>
+		
+		<!-- Calls checkout() function when button is clicked -->
+		<button onclick="checkout()">Checkout</button>
+		<span id="zeroItems"></span>
+		
+	</div>
+	
+	<script>
+	
+		// Goes to page NotSignedIn.html if userIsSignedIn is 0 or null/undefined.
+		if(sessionStorage.userIsSignedIn == 0 || sessionStorage.userIsSignedIn == null)
+		{
+			window.location="NotSignedIn.html";
+		}
+		
+		// Creates array with all product names.
+		let productList = JSON.parse(sessionStorage.getItem("products"));
+		// Creates array with all product prices.
+		let productPrice = JSON.parse(sessionStorage.getItem("prices"));
+		// Creates productQuantity.
+		let productQuantity;
+		// Creates total variable to store total price.
+		let total = 0;
+		
+		// Calls showSelectedProducts function.
+		showSelectedProducts();
+		
+		// Shows the products that are in the basket, the quantity of those products, and the total price.
+		function showSelectedProducts()
+		{
+			// Stores myProductQuantity array from sessionStorage as an array.
+			productQuantity = JSON.parse(sessionStorage.getItem("myProductQuantity"));
+			// Changes element with the id selectedProducts to show an empty string.
+			document.getElementById("selectedProducts").innerHTML = "";
+			
+			// Shows the products that are in the basket and the quantity of those products.
+			for(let i = 0; i < productList.length; i++)
+			{
+				// Displays products if their quantity is greater than 0.
+				if(productQuantity[i] > 0)
+				{
+					document.getElementById("selectedProducts").innerHTML += productQuantity[i] + " x " + productList[i] + "<br>";
+				}
+				
+				// Stores the value of the element with the id selectedProducts in sessionStorage.
+				sessionStorage.basketList = document.getElementById("selectedProducts").innerHTML;
+			}
+		
+			total = 0;
+			
+			// Calculates total price of the products in basket.
+			for(let j = 0; j < productPrice.length; j++)
+			{
+				total += productPrice[j] * productQuantity[j];
+			}
+			
+			// Stores the value of total in sessionStorage.
+			sessionStorage.totalPrice = total;
+			// Stores 0 as the reduced price in sessionStorage.
+			sessionStorage.reducedPrice = 0;
+			
+			// Changes the element with the id totalCost to show the total price.
+			document.getElementById("totalCost").innerHTML = "Total Price: €" + total;
+		}
+		
+		// Sets the quantity of all products to 0.
+		function clearBasket()
+		{
+			for(let i = 0; i < productQuantity.length; i++)
+			{
+				productQuantity[i] = 0;
+			}
+			
+			// Stores the productQuantity array in sessionStorage.
+			sessionStorage.setItem("myProductQuantity", JSON.stringify(productQuantity));
+			// Calls showSelectedProducts function.
+			showSelectedProducts();
+		}
+		
+		// Goes to CheckoutPage.html if the amount of items in the basket is greater than 0.
+		function checkout()
+		{
+			// Creates numOfItems and sets it to 0.
+			let numOfItems = 0;
+			
+			// Counts the number of items in the basket.
+			for(let i = 0; i < productQuantity.length; i++)
+			{	
+				numOfItems += productQuantity[i];
+			}
+			
+			// Displays message if the amount of items in the basket is less than 1, goes to CheckoutPage.html if the amount of items in the basket is greater than 0.
+			if(numOfItems < 1)
+			{
+				// Changes element with the id zeroItems to show message.
+				document.getElementById("zeroItems").innerHTML = "There are no items in the basket";
+				// Changes colour of element with the id zeroItems to red.
+				document.getElementById("zeroItems").style.color = "red";
+			}
+			else
+			{
+				window.location="CheckoutPage.html";
+			}
+		}
+		
+	</script>
+  </body>
+
+</html>

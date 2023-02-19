@@ -1,0 +1,41 @@
+/*
+ GUI Project 2022 Patrick Duffy
+ Home Page CSS
+ */
+ 
+ /* All classes and ids are used on the Home Page */
+
+.container
+{
+	/* Displays grid */
+	display: grid;
+	/* Creates 5 fractional units */
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	/* Adds grid gap of 10 pixels */
+	grid-gap: 10px;
+}
+
+#idLogoBox
+{
+	/* Sets text size to 150% */
+	font-size: 150%;
+	/* Aligns text to center of the div */
+	text-align: center;
+	/* Adds 5 pixels of padding */
+	padding: 5px;
+}
+
+#currentOffer
+{
+	/* Aligns text to center of the div */
+	text-align: center;
+}
+
+.product
+{
+	/* Spans 5 colums in the grid */
+	grid-column:span 5;
+	/* Aligns text to center of the div */
+	text-align: center;
+}
+		

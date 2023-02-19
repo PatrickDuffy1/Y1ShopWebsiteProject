@@ -1,0 +1,123 @@
+<!doctype html>
+
+<!-- 
+ GUI Project 2022 Patrick Duffy
+ Product Page
+ -->
+
+<html>
+
+  <head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title id="productTitle">No Product</title>
+	<link rel="stylesheet" href="CSS/MainStyleCSS.css">
+  </head>
+
+  <body>
+	
+	<!-- Class flexBox is in MainStyleCSS.css -->
+	<div class="flexBox">
+	
+		<!-- Link that brings user to the the home page when clicked -->
+		<a href="HomePage.html" target="_self"><span class="home">Home Page</span></a>
+		
+		<h1 id="productName"></h1>
+		<h1 id="productPrice"></h1>
+		
+		<span id="productImage"></span>
+		
+		<h3>Product Descriptipon:</h3>
+			<p id="productDescription"></p>
+		
+		<br>
+		
+		<!-- Calls addToBasket() function when button is clicked -->
+		<button onclick="addToBasket()">+</button>
+		<h3 id="currentQuantity"></h3>
+		<span id="removeItem"></span>
+		
+	</div>
+	
+	<script>
+	
+		// Goes to page NotSignedIn.html if userIsSignedIn is 0 or null/undefined.
+		if(sessionStorage.userIsSignedIn == 0 || sessionStorage.userIsSignedIn == null)
+		{
+			window.location="NotSignedIn.html";
+		}
+		
+		// Stores selectedProduct from sessionStorage as a variable.
+		let product = sessionStorage.selectedProduct;
+		// Stores selectedProductPrice from sessionStorage as a variable.
+		let price = sessionStorage.selectedProductPrice;
+		// Stores selectedProductNumber from sessionStorage as a variable.
+		let productNumber = sessionStorage.selectedProductNumber;
+		// Stores myProductQuantity array from sessionStorage as an array.
+		let quantity = JSON.parse(sessionStorage.getItem("myProductQuantity"));
+		// Stores setProductImage from sessionStorage as a variable.
+		let productImage = sessionStorage.setProductImage;
+		// Stores setProductDescription from sessionStorage as a variable.
+		let productDescription = sessionStorage.setProductDescription;
+		// Creates quantityMsg and sets it.
+		let quantityMsg = "Qty ";
+		
+		// Calls buttonCheck function and passes the value in the productNumber variable to it.
+		buttonCheck(productNumber);
+	
+		// Changes element with the id productTitle to show the value in product.
+		document.getElementById("productTitle").innerHTML = product;
+		document.getElementById("productName").innerHTML = "Product: " + product;
+		// Changes element with the id productPrice to show the value in price.
+		document.getElementById("productPrice").innerHTML = "€" + price;
+		// Changes element with the id productImage to show the value in productImage.
+		document.getElementById("productImage").innerHTML = productImage;
+		// Changes element with the id productDescription to show the value in productDescription.
+		document.getElementById("productDescription").innerHTML = productDescription;
+		// Changes element with the id currentQuantity to show the value in quantityMsg and the value of the element quantity[productNumber].
+		document.getElementById("currentQuantity").innerHTML = quantityMsg + quantity[productNumber];
+		
+		// Adds 1 to the quantity of the product in the basket.
+		function addToBasket()
+		{
+			// Increments quantity of product by 1.
+			quantity[productNumber]++;
+			// Changes element with the id currentQuantity to show the value in quantityMsg and the value of the element quantity[productNumber].
+			document.getElementById("currentQuantity").innerHTML = quantityMsg + quantity[productNumber];
+			// Stores quantity array in sessionStorage.
+			sessionStorage.setItem("myProductQuantity", JSON.stringify(quantity));
+			// Calls buttonCheck function and passes the value in the productNumber variable to it.
+			buttonCheck(productNumber);
+		}
+		
+		// Subtracts 1 from the quantity of the product in the basket.
+		function removeFromBasket()
+		{
+			// Decrements quantity of product by 1.
+			quantity[productNumber]--;
+			// Changes element with the id currentQuantity to show the value in quantityMsg and the value of the element quantity[productNumber].
+			document.getElementById("currentQuantity").innerHTML = quantityMsg + quantity[productNumber];
+			// Stores quantity array in sessionStorage.
+			sessionStorage.setItem("myProductQuantity", JSON.stringify(quantity));
+			// Calls buttonCheck function and passes the value in the productNumber variable to it.
+			buttonCheck(productNumber);
+		}
+		
+		// Removes button that calls the removeFromBasket function if the quantity of product is less than 1.
+		function buttonCheck(number)
+		{
+			if(quantity[number] < 1)
+			{
+				document.getElementById("removeItem").innerHTML = "";
+			}
+			else
+			{
+				document.getElementById("removeItem").innerHTML = '<button onclick="removeFromBasket()">-</button>';
+			}
+		}
+			
+	</script>
+  </body>
+
+</html>

@@ -1,0 +1,184 @@
+<!doctype html>
+
+<!-- 
+ GUI Project 2022 Patrick Duffy
+ Home Page
+ -->
+
+<html>
+
+  <head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Home</title>
+	<link rel="stylesheet" href="CSS/HomePageCSS.css">
+	
+  </head>
+
+  <body>
+	
+	<!-- Div with class container from HomePageCSS.css -->
+	<div class="container">
+		
+		<!-- Div with id idLogoBox that spans 4 columns -->
+		<div id="idLogoBox" style="grid-column:span 4;">
+			<h1>
+				Furniture Shop
+			</h1>
+		</div>
+		
+		<!-- Div with text aligned to the center of the div -->
+		<div style="text-align: center">
+			<br>
+			<!-- Image of basket that brings user to the basket page when clicked -->
+			<a href="Basket.html" target="_self" id="clickBasket"><img src="Images/BasketImage.png" alt="Basket" width="50" height="50"></a>
+		</div>
+		
+		<!-- Div with id currentOffer that spans 5 columns -->
+		<div id="currentOffer" style="grid-column:span 5;">
+		</div>
+		
+		<!-- Div with class product from HomePageCSS.css -->
+		<div class="product">
+			<!-- Calls nextProduct function when clicked -->
+			<button onclick="nextProduct()">Next Product</button>
+		</div>
+		
+		<!-- Div with class product from HomePageCSS.css -->
+		<div class="product">
+			<!-- Link that brings user to the the product page when clicked -->
+			<a href="ProductPage.html" target="_self" id="currentProduct"></a>
+		</div>
+		
+		<!-- Div with class product from HomePageCSS.css and 20 pixels of padding on the top of it -->
+		<div class="product" style="padding-top: 20px">
+			<!-- Image that brings user to the the product page when clicked -->
+			<a href="ProductPage.html" target="_self" id="currentProductImage"></a>
+		</div>
+			
+	</div>
+	
+	
+	<script>
+	
+		// Goes to page NotSignedIn.html if userIsSignedIn is 0 or null/undefined.
+		if(sessionStorage.userIsSignedIn == 0 || sessionStorage.userIsSignedIn == null)
+		{
+			window.location="NotSignedIn.html";
+		}
+		
+		// Creates array with all product names.
+		let productList = ["Wooden Chair", "Metal Chair", "Plastic Chair", "Dining Table", "Coffee Table"];
+		// Creates array with all product images.
+		let productImages = ['<img src="Images/WoodenChair.jpg" alt="Wooden Chair">', '<img src="Images/MetalChair.jpg" alt="Metal Chair">', '<img src="Images/PlasticChair.jpg" alt="Plastic Chair">', '<img src="Images/DiningTable.jpg" alt="Dining Table">', '<img src="Images/CoffeeTable.jpg" alt="Coffee Table">'];
+		// Creates array with all product prices.
+		let productPrice = [80, 50, 20, 500, 300];
+		// Creates array with all product descriptions.
+		let productDescription = ["Wooden Chair made from oak.", "Stainless steel chair.", "White Plastic Chair.", "Four seater timber dining table.", "Small wooden coffee table."];
+		
+		// Checks if value of the array myProductQuantity in sessionStorage is null.
+		if(JSON.parse(sessionStorage.getItem("myProductQuantity")) == null)
+		{
+			// Declares productQuantity array and sets all quantity arrays to 0.
+			let productQuantity = [0, 0, 0, 0, 0];
+			// Stores productQuantity array in sessionStorage.
+			sessionStorage.setItem("myProductQuantity", JSON.stringify(productQuantity));
+		}
+		
+		// Creates a counter variable to show current product on screen. Product 0 is Wooden chair.
+		let counter = 0;
+		// Creates a string variable with nothing in it.
+		let currentImage = "";
+
+		// Stores productPrice array in sessionStorage.
+		sessionStorage.setItem("prices", JSON.stringify(productPrice));
+		// Stores productList array in sessionStorage.
+		sessionStorage.setItem("products", JSON.stringify(productList));
+	
+		// Creates a variable called randomNumber and store a random number between 1 - 3 in it.
+		let randomNumber = Math.floor(Math.random() * 3) + 1;
+
+		// Creates a variable to store the width of the slideshow offer images.
+		let offerWidth = "80%";
+		// Creates a variable to store the height of the slideshow offer images.
+		let offerHeight = "80%";
+		
+		// Calls setProduct function and passes the value in the counter variable to it.
+		setProduct(counter)
+		
+		// Checks the value of the randomNumber variable and sets the element with the id currentOffer to the corresponding image. Width and height are set to offerWidth and offerHeight.
+		if(randomNumber == 1)
+		{
+			document.getElementById("currentOffer").innerHTML = '<img src="Images/SummerSale.png" alt="Summer Sale" width=' + offerWidth + ' height=' + offerHeight + ' >';
+		}
+		else if(randomNumber == 2)
+		{
+			document.getElementById("currentOffer").innerHTML = '<img src="Images/GreatOffers.png" alt="Great offers" width=' + offerWidth + ' height=' + offerHeight + ' >';
+		}
+		else if(randomNumber == 3)
+		{
+			document.getElementById("currentOffer").innerHTML = '<img src="Images/CouponCode.png" alt="Coupon Code" width=' + offerWidth + ' height=' + offerHeight + ' >';
+		}
+		
+		// Increases counter by 1 or sets counter to 0.
+		function nextProduct()
+		{
+			// Increments counter by 1;
+			counter++;
+			
+			// Counter is set to 0 if greater than or equal to the amount of products for wrap around and to prevent out of bounds problem.
+			if(counter >= productList.length)
+			{
+				counter = 0;
+			}
+			
+			// Calls setProduct function and passes the value in the counter variable to it.
+			setProduct(counter);
+		}
+		
+		// Shows current product based on the value of counter.
+		function setProduct(counter)
+		{	
+			// Calls resetImageWidth function and passes a string with the width of the product image.
+			resetImageWidth(' width="40%"');
+		
+			// Changes element with the id currentProduct to show the current product name and price.
+			document.getElementById("currentProduct").innerHTML = "Product:" + productList[counter] + ", Price: €" + productPrice[counter];
+			// Changes element with the id currentProduct to show the product image.
+			document.getElementById("currentProductImage").innerHTML = currentImage;
+			
+			// Stores the value in productList[counter] into sessionStorage.
+			sessionStorage.selectedProduct = productList[counter];
+			// Stores the value in productPrice[counter] into sessionStorage.
+			sessionStorage.selectedProductPrice = productPrice[counter];
+			// Stores the value in productImages[counter] into sessionStorage.
+			sessionStorage.setProductImage = productImages[counter];
+			// Stores the value in productDescription[counter] into sessionStorage.
+			sessionStorage.setProductDescription = productDescription[counter];
+			// Stores the value in the counter variable into sessionStorage.
+			sessionStorage.selectedProductNumber = counter;
+		}
+		
+		// Sets variable currentImage to productImages[counter] with and can add width size into image tag.
+		function resetImageWidth(imageWidthString)
+		{
+			// Sets currentImage to an empty string.
+			currentImage = "";
+			
+			// Sets currentImage to productImages[counter], leaves out the '>' symbol at the end of the tag.
+			for(let i = 0; i < productImages[counter].length - 1; i++)
+			{
+				currentImage += productImages[counter].charAt(i);
+			}
+			
+			// Adds the string in imageWidthString to the end of currentImage.
+			currentImage += imageWidthString;
+			// Adds the '>' symbol at the end of the tag.
+			currentImage += '>';
+		}
+		
+	</script>
+  </body>
+
+</html>

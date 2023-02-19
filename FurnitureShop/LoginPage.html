@@ -1,0 +1,146 @@
+<!doctype html>
+
+ <!-- 
+ GUI Project 2022 Patrick Duffy
+ Login Page
+ -->
+
+<html>
+
+  <head>
+  
+	<meta charset="utf-8"/>
+	<!-- Code from https://www.w3schools.com/css/css_rwd_viewport.asp -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+    <title>Login</title>
+	<link rel="stylesheet" href="CSS/MainStyleCSS.css">
+	
+  </head>
+
+  <body>
+	
+	<!-- Class flexBox is in MainStyleCSS.css -->
+	<div class="flexBox">
+		
+		<div>
+		
+			<h1>Please Sign In</h1>
+			
+			<p>
+				Email:
+				<!-- Calls emailValidation() function on input -->
+				<input id="inputEmail" type="text" oninput="emailValidation()">
+				<!-- Displays message if email is invalid -->
+				<span id="validEmail"></span>
+				
+				<br><br>
+				
+				Password:
+				<!-- Calls passwordInput() function on input -->
+				<input id="inputPassword" type="password" oninput="passwordInput()">
+				<!-- Calls showPassword() function when button is clicked -->
+				<input id="passwordVisable" type="checkbox" onclick="showPassword()">Show Password 
+			</p>
+			
+			<!-- Calls signIn() function when button is clicked -->
+			<button onclick="signIn()">Sign In</button>
+			<!-- Displays message if credentials are invalid/incorrect -->
+			<span id="invalidSignIn"></span>
+		</div>
+		
+	</div>
+	
+	<script>
+
+		// Sets userIsSigned in to 0 (false) and stores it in session storage.
+		sessionStorage.userIsSignedIn = 0;
+		// Unchecks "passwordVisable" checkbox on page reload.
+		// Code from  https://www.w3schools.com/jsref/prop_checkbox_checked.asp
+		document.getElementById("passwordVisable").checked = false;
+	 
+		// Validates email address by checking for '@' and '.'
+		function emailValidation()
+		{
+			let emailAddress = document.getElementById("inputEmail").value;
+			
+			// Clears the "invalid sign in" message.
+			document.getElementById("invalidSignIn").innerHTML = "";
+			
+			// Validates email address by checking for '@' and '.'
+			if(emailAddress.includes("@") && emailAddress.includes("."))
+			{
+				// Clears the "invalid email" message.
+				document.getElementById("validEmail").innerHTML = "";
+			}
+			else
+			{
+				// Show red "invalid email" message.
+				document.getElementById("validEmail").innerHTML = "Invalid Email";
+				document.getElementById("validEmail").style.color = "red";
+			}
+		}
+		
+		// Hide invalid sign in message if password field is updated.
+		function passwordInput()
+		{
+			document.getElementById("invalidSignIn").innerHTML = "";
+		}
+		
+		// Checks if email and password are correct.
+		function signIn()
+		{
+			// Hard coded email and password.
+			let validEmail1 = "abc@def.com";
+			let validPassword1 = "Password123";
+			
+			// Get email address and password and stores them as variables.
+			let emailAddress = document.getElementById("inputEmail").value;
+			let password = document.getElementById("inputPassword").value;
+			
+			// Checks if email address and password are valid.
+			if(emailAddress == validEmail1 && password == validPassword1)
+			{
+				// If email address and password are valid.
+				
+				// Sets userIsSigned in to 1 (true) and stores it in session storage.
+				sessionStorage.userIsSignedIn = 1;
+				
+				// Open Home page if email address and password are valid.
+				// Code from https://stackoverflow.com/questions/5025941/is-there-a-way-to-get-a-button-element-to-link-to-a-location-without-wrapping
+				window.location="HomePage.html";
+			}
+			else
+			{
+				// If email address and password are not valid.
+				
+				// Show message if email address and password are invalid.
+				document.getElementById("invalidSignIn").innerHTML = "Invalid credentials";
+				// Changes colour of message to red.
+				document.getElementById("invalidSignIn").style.color = "red";
+			}
+		}
+		
+		// Hides or shows password. Not needed on Microsoft Edge.
+		// Code from https://www.w3schools.com/howto/howto_js_toggle_password.asp
+		function showPassword()
+		{
+			// Get the password input box element.
+			passwordElement = document.getElementById("inputPassword");
+
+			// Toggle input box type between "text" and "password" to make text visable or not.
+			if (passwordElement.type === "password") 
+			{
+				passwordElement.type = "text";
+			} 
+			else 
+			{
+				passwordElement.type = "password";
+			}
+		} 
+	
+	</script>
+
+  </body>
+
+</html>

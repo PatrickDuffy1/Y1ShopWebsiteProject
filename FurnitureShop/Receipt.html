@@ -1,0 +1,92 @@
+<!doctype html>
+
+<!-- 
+ GUI Project 2022 Patrick Duffy
+ Receipt Page
+ -->
+
+<html>
+
+  <head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Payment Succsessful</title>
+	<link rel="stylesheet" href="CSS/MainStyleCSS.css">
+  </head>
+
+  <body>
+    <!-- Class flexBox is in MainStyleCSS.css -->
+	<div class="flexBox">
+	
+		<h1>Payment was Successful</h1>
+		
+		<!-- Shows user details -->
+		<p>
+			Name: <span id="userName"></span>
+			<br>
+			Address: <span id="userAddress"></span>
+		</p>
+		
+		<!-- Shows items bought and total cost -->
+		
+		<p id="selectedProducts"></p>
+		
+		<h3 id="totalPrice"></h3>
+		
+		<h3 id="finalPrice"></h3>
+		
+		<br>
+		
+		<!-- Link that brings user to the the login page when clicked -->
+		<h2><a href="LoginPage.html" target="_self">Return to Login Page</a></h2>
+		
+	</div>
+	
+	<script>
+	
+		// Goes to page NotSignedIn.html if userIsSignedIn is 0 or null/undefined.
+		if(sessionStorage.userIsSignedIn == 0 || sessionStorage.userIsSignedIn == null)
+		{
+			window.location="NotSignedIn.html";
+		}
+		
+		// Stores totalPrice from sessionStorage as a variable.
+		let total = sessionStorage.totalPrice;
+		
+		// Sets element at id userName equal to saveUserName from sessionStorage.
+		document.getElementById("userName").innerHTML = sessionStorage.saveUserName;
+		// Sets element at id userAddress equal to saveUserAddress from sessionStorage.
+		document.getElementById("userAddress").innerHTML = sessionStorage.saveUserAddress;
+		// Sets element at id selectedProducts equal to basketList from sessionStorage.
+		document.getElementById("selectedProducts").innerHTML = sessionStorage.basketList;
+		
+		// Checks value of reducedPrice from sessionStorage.
+		if(sessionStorage.reducedPrice == 0)
+		{
+			// If reducedPrice is equal to 0 (false).
+		
+			// Displays message showing the total price at the element with the id totalPrice.
+			document.getElementById("totalPrice").innerHTML = "Total: €" + total;
+		}
+		else
+		{
+			// If reducedPrice is equal to 1 (true).
+			
+			// Displays message showing the total price and the reduction amount at the element with the id totalPrice.
+			document.getElementById("totalPrice").innerHTML = "Total: €" + total + " - 20%";
+			// Sets total equal to finalReducedPrice from session storage.
+			total = sessionStorage.finalReducedPrice;
+		}
+		
+		// Displays message showing the total price at the element with the id finalPrice.
+		document.getElementById("finalPrice").innerHTML = "Final Price: €" + total;
+		
+		// Create an array called productQuantity and set all elements to 0.
+		let productQuantity = [0, 0, 0, 0, 0];
+		// Sets the array myProductQuantity in sessionStorage equal to the array productQuantity.
+		sessionStorage.setItem("myProductQuantity", JSON.stringify(productQuantity));
+	</script>
+  </body>
+
+</html>

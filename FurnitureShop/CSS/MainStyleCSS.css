@@ -1,0 +1,24 @@
+/*
+ GUI Project 2022 Patrick Duffy
+ Main Style CSS
+ */
+
+/* Used on all pages apart from the Home Page */
+/* Code from https://stackoverflow.com/questions/53489229/html-paragraph-how-to-align-text-at-the-center-and-start-all-the-text-lines-at-t */
+.flexBox
+{
+	/* Displays flexbox */
+	display:flex;
+	flex-direction: column;
+	/* Aligns items to the center of the div */
+	align-items: center
+}
+
+/* Used on the Product page, the Basket page, and the Checkout page*/
+.home
+{
+	/* Sets text size to 150% */
+	font-size: 150%;
+	/* Adds 30 pixels of margin space to the bottom of the margin */
+	margin-bottom: 30px;
+}
